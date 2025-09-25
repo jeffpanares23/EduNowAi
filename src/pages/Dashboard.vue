@@ -1,10 +1,9 @@
 <template>
   <AppLayout>
     <div class="relative overflow-hidden">
-      <!-- Hero Section with Parallax Background -->
+      <!-- Hero Section with Full Viewport -->
       <div
-        class="relative min-h-screen flex items-center justify-center"
-        :style="{ transform: `translateY(${scrollY * 0.5}px)` }"
+        class="relative h-screen flex items-center justify-center"
       >
         <!-- Animated Background Elements -->
         <div class="absolute inset-0 overflow-hidden">
@@ -37,15 +36,15 @@
           <!-- Floating particles -->
           <div class="absolute inset-0">
             <div
-              v-for="i in 20"
+              v-for="i in 8"
               :key="i"
-              class="absolute w-2 h-2 bg-primary-400 dark:bg-primary-600 rounded-full opacity-60 animate-pulse"
+              class="absolute w-1.5 h-1.5 bg-primary-400 dark:bg-primary-600 rounded-full opacity-40 animate-pulse"
               :style="{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 3}s`,
-                animationDuration: `${2 + Math.random() * 2}s`,
-                transform: `translateY(${scrollY * (0.1 + Math.random() * 0.3)}px)`,
+                left: `${20 + (i * 10)}%`,
+                top: `${20 + (i * 8)}%`,
+                animationDelay: `${i * 0.5}s`,
+                animationDuration: `${3 + (i % 2)}s`,
+                transform: `translateY(${scrollY * 0.1}px)`,
               }"
             ></div>
           </div>
@@ -55,7 +54,7 @@
         <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div class="mb-6 animate-fade-in-up">
             <h1
-              class="text-5xl md:text-7xl font-bold text-surface-900 dark:text-surface-100 mb-4 leading-tight"
+              class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-surface-900 dark:text-surface-100 mb-4 leading-tight"
             >
               Welcome back,
               <span
@@ -64,76 +63,76 @@
                 {{ authStore.user?.name?.split(' ')[0] }}!
               </span>
             </h1>
-            <p class="text-xl md:text-2xl text-surface-600 dark:text-surface-400 mb-6">
+            <p class="text-lg sm:text-xl md:text-2xl text-surface-600 dark:text-surface-400 mb-6">
               Ready to accelerate your learning journey?
             </p>
           </div>
 
           <!-- Quick Stats Cards with Hover Effects -->
           <div
-            class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-8 animate-fade-in-up animation-delay-300"
+            class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 md:gap-6 mb-8 animate-fade-in-up animation-delay-300"
           >
             <div
-              class="group card p-6 hover:scale-105 transition-all duration-300 hover:shadow-2xl"
+              class="group card p-4 sm:p-6 hover:scale-105 transition-all duration-300 hover:shadow-2xl"
             >
               <div class="flex flex-col items-center">
                 <div
                   class="p-3 bg-primary-100 dark:bg-primary-900 rounded-full mb-3 group-hover:scale-110 transition-transform"
                 >
-                  <BookOpenIcon class="h-8 w-8 text-primary-600 dark:text-primary-400" />
+                  <BookOpenIcon class="h-6 w-6 sm:h-8 sm:w-8 text-primary-600 dark:text-primary-400" />
                 </div>
-                <p class="text-3xl font-bold text-surface-900 dark:text-surface-100 mb-1">
+                <p class="text-2xl sm:text-3xl font-bold text-surface-900 dark:text-surface-100 mb-1">
                   {{ libraryStore.items.length }}
                 </p>
-                <p class="text-sm text-surface-600 dark:text-surface-400">Documents</p>
+                <p class="text-xs sm:text-sm text-surface-600 dark:text-surface-400">Documents</p>
               </div>
             </div>
 
             <div
-              class="group card p-6 hover:scale-105 transition-all duration-300 hover:shadow-2xl"
+              class="group card p-4 sm:p-6 hover:scale-105 transition-all duration-300 hover:shadow-2xl"
             >
               <div class="flex flex-col items-center">
                 <div
                   class="p-3 bg-success-100 dark:bg-success-900 rounded-full mb-3 group-hover:scale-110 transition-transform"
                 >
-                  <ClockIcon class="h-8 w-8 text-success-600 dark:text-success-400" />
+                  <ClockIcon class="h-6 w-6 sm:h-8 sm:w-8 text-success-600 dark:text-success-400" />
                 </div>
-                <p class="text-3xl font-bold text-surface-900 dark:text-surface-100 mb-1">
+                <p class="text-2xl sm:text-3xl font-bold text-surface-900 dark:text-surface-100 mb-1">
                   {{ Math.round(analyticsStore.globalMetrics.totalStudyMin / 60) }}h
                 </p>
-                <p class="text-sm text-surface-600 dark:text-surface-400">Study Time</p>
+                <p class="text-xs sm:text-sm text-surface-600 dark:text-surface-400">Study Time</p>
               </div>
             </div>
 
             <div
-              class="group card p-6 hover:scale-105 transition-all duration-300 hover:shadow-2xl"
+              class="group card p-4 sm:p-6 hover:scale-105 transition-all duration-300 hover:shadow-2xl"
             >
               <div class="flex flex-col items-center">
                 <div
                   class="p-3 bg-warn-100 dark:bg-warn-900 rounded-full mb-3 group-hover:scale-110 transition-transform"
                 >
-                  <ChartBarIcon class="h-8 w-8 text-warn-600 dark:text-warn-400" />
+                  <ChartBarIcon class="h-6 w-6 sm:h-8 sm:w-8 text-warn-600 dark:text-warn-400" />
                 </div>
-                <p class="text-3xl font-bold text-surface-900 dark:text-surface-100 mb-1">
+                <p class="text-2xl sm:text-3xl font-bold text-surface-900 dark:text-surface-100 mb-1">
                   {{ analyticsStore.globalMetrics.avgScore }}%
                 </p>
-                <p class="text-sm text-surface-600 dark:text-surface-400">Avg Score</p>
+                <p class="text-xs sm:text-sm text-surface-600 dark:text-surface-400">Avg Score</p>
               </div>
             </div>
 
             <div
-              class="group card p-6 hover:scale-105 transition-all duration-300 hover:shadow-2xl"
+              class="group card p-4 sm:p-6 hover:scale-105 transition-all duration-300 hover:shadow-2xl"
             >
               <div class="flex flex-col items-center">
                 <div
                   class="p-3 bg-error-100 dark:bg-error-900 rounded-full mb-3 group-hover:scale-110 transition-transform"
                 >
-                  <FireIcon class="h-8 w-8 text-error-600 dark:text-error-400" />
+                  <FireIcon class="h-6 w-6 sm:h-8 sm:w-8 text-error-600 dark:text-error-400" />
                 </div>
-                <p class="text-3xl font-bold text-surface-900 dark:text-surface-100 mb-1">
+                <p class="text-2xl sm:text-3xl font-bold text-surface-900 dark:text-surface-100 mb-1">
                   {{ analyticsStore.globalMetrics.streakDays }}
                 </p>
-                <p class="text-sm text-surface-600 dark:text-surface-400">Day Streak</p>
+                <p class="text-xs sm:text-sm text-surface-600 dark:text-surface-400">Day Streak</p>
               </div>
             </div>
           </div>
@@ -164,7 +163,7 @@
       <!-- Content Sections with Parallax -->
       <div class="relative bg-surface-50 dark:bg-surface-900">
         <!-- Recent Documents Section -->
-        <section class="py-16 relative" :style="{ transform: `translateY(${scrollY * 0.1}px)` }">
+        <section class="py-16 relative">
           <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-10">
               <h2 class="text-4xl font-bold text-surface-900 dark:text-surface-100 mb-3">
@@ -242,47 +241,56 @@
 
         <!-- Learning Progress Section -->
         <section
-          class="py-16 bg-white dark:bg-surface-800 relative overflow-hidden"
-          :style="{ transform: `translateY(${scrollY * 0.08}px)` }"
+          class="py-20 bg-white dark:bg-surface-800 relative overflow-hidden"
         >
-          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-10 animate-fade-in-up">
-              <h2 class="text-4xl font-bold text-surface-900 dark:text-surface-100 mb-3">
+          <!-- Background decoration -->
+          <div class="absolute inset-0">
+            <div
+              class="absolute top-20 right-20 w-40 h-40 bg-primary-100 dark:bg-primary-900 rounded-full opacity-20 animate-float"
+            ></div>
+            <div
+              class="absolute bottom-20 left-20 w-32 h-32 bg-success-100 dark:bg-success-900 rounded-full opacity-25 animate-float-delayed"
+            ></div>
+          </div>
+
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16 animate-fade-in-up">
+              <h2 class="text-5xl font-bold text-surface-900 dark:text-surface-100 mb-4">
                 Your Learning Progress
               </h2>
-              <p class="text-xl text-surface-600 dark:text-surface-400">
+              <p class="text-xl text-surface-600 dark:text-surface-400 max-w-2xl mx-auto">
                 Track your journey and celebrate milestones
               </p>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
               <!-- Progress Chart -->
-              <div class="card p-8 animate-slide-in-left animation-delay-200">
-                <h3 class="text-2xl font-semibold text-surface-900 dark:text-surface-100 mb-6">
+              <div class="card p-10 animate-slide-in-left animation-delay-200">
+                <h3 class="text-3xl font-semibold text-surface-900 dark:text-surface-100 mb-8">
                   Weekly Study Hours
                 </h3>
-                <div class="space-y-4">
+                <div class="space-y-6">
                   <div class="flex items-center justify-between">
-                    <span class="text-surface-600 dark:text-surface-400">This Week</span>
-                    <span class="font-semibold text-surface-900 dark:text-surface-100"
+                    <span class="text-lg text-surface-600 dark:text-surface-400">This Week</span>
+                    <span class="text-2xl font-bold text-surface-900 dark:text-surface-100"
                       >8.5 hours</span
                     >
                   </div>
-                  <div class="bg-surface-200 dark:bg-surface-700 rounded-full h-4">
+                  <div class="bg-surface-200 dark:bg-surface-700 rounded-full h-6">
                     <div
-                      class="bg-gradient-to-r from-primary-500 to-primary-600 h-4 rounded-full"
+                      class="bg-gradient-to-r from-primary-500 to-primary-600 h-6 rounded-full transition-all duration-1000"
                       style="width: 85%"
                     ></div>
                   </div>
                   <div class="flex items-center justify-between">
-                    <span class="text-surface-600 dark:text-surface-400">Last Week</span>
-                    <span class="font-semibold text-surface-900 dark:text-surface-100"
+                    <span class="text-lg text-surface-600 dark:text-surface-400">Last Week</span>
+                    <span class="text-2xl font-bold text-surface-900 dark:text-surface-100"
                       >6.2 hours</span
                     >
                   </div>
-                  <div class="bg-surface-200 dark:bg-surface-700 rounded-full h-4">
+                  <div class="bg-surface-200 dark:bg-surface-700 rounded-full h-6">
                     <div
-                      class="bg-gradient-to-r from-success-500 to-success-600 h-4 rounded-full"
+                      class="bg-gradient-to-r from-success-500 to-success-600 h-6 rounded-full transition-all duration-1000"
                       style="width: 62%"
                     ></div>
                   </div>
@@ -290,69 +298,69 @@
               </div>
 
               <!-- Skill Progress -->
-              <div class="card p-8 animate-slide-in-right animation-delay-400">
-                <h3 class="text-2xl font-semibold text-surface-900 dark:text-surface-100 mb-6">
+              <div class="card p-10 animate-slide-in-right animation-delay-400">
+                <h3 class="text-3xl font-semibold text-surface-900 dark:text-surface-100 mb-8">
                   Skill Development
                 </h3>
-                <div class="space-y-6">
-                  <div class="flex items-center space-x-4">
+                <div class="space-y-8">
+                  <div class="flex items-center space-x-6">
                     <div
-                      class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center"
+                      class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg"
                     >
-                      <span class="text-white font-bold">JS</span>
+                      <span class="text-white font-bold text-lg">JS</span>
                     </div>
                     <div class="flex-1">
-                      <div class="flex justify-between mb-2">
-                        <span class="font-medium text-surface-900 dark:text-surface-100"
+                      <div class="flex justify-between mb-3">
+                        <span class="text-lg font-medium text-surface-900 dark:text-surface-100"
                           >JavaScript</span
                         >
-                        <span class="text-sm text-surface-600 dark:text-surface-400">78%</span>
+                        <span class="text-lg font-semibold text-surface-600 dark:text-surface-400">78%</span>
                       </div>
-                      <div class="bg-surface-200 dark:bg-surface-700 rounded-full h-2">
+                      <div class="bg-surface-200 dark:bg-surface-700 rounded-full h-3">
                         <div
-                          class="bg-gradient-to-r from-blue-500 to-blue-600 h-2 rounded-full"
+                          class="bg-gradient-to-r from-blue-500 to-blue-600 h-3 rounded-full transition-all duration-1000"
                           style="width: 78%"
                         ></div>
                       </div>
                     </div>
                   </div>
-                  <div class="flex items-center space-x-4">
+                  <div class="flex items-center space-x-6">
                     <div
-                      class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center"
+                      class="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center shadow-lg"
                     >
-                      <span class="text-white font-bold">PY</span>
+                      <span class="text-white font-bold text-lg">PY</span>
                     </div>
                     <div class="flex-1">
-                      <div class="flex justify-between mb-2">
-                        <span class="font-medium text-surface-900 dark:text-surface-100"
+                      <div class="flex justify-between mb-3">
+                        <span class="text-lg font-medium text-surface-900 dark:text-surface-100"
                           >Python</span
                         >
-                        <span class="text-sm text-surface-600 dark:text-surface-400">65%</span>
+                        <span class="text-lg font-semibold text-surface-600 dark:text-surface-400">65%</span>
                       </div>
-                      <div class="bg-surface-200 dark:bg-surface-700 rounded-full h-2">
+                      <div class="bg-surface-200 dark:bg-surface-700 rounded-full h-3">
                         <div
-                          class="bg-gradient-to-r from-green-500 to-green-600 h-2 rounded-full"
+                          class="bg-gradient-to-r from-green-500 to-green-600 h-3 rounded-full transition-all duration-1000"
                           style="width: 65%"
                         ></div>
                       </div>
                     </div>
                   </div>
-                  <div class="flex items-center space-x-4">
+                  <div class="flex items-center space-x-6">
                     <div
-                      class="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center"
+                      class="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg"
                     >
-                      <span class="text-white font-bold">AI</span>
+                      <span class="text-white font-bold text-lg">AI</span>
                     </div>
                     <div class="flex-1">
-                      <div class="flex justify-between mb-2">
-                        <span class="font-medium text-surface-900 dark:text-surface-100"
+                      <div class="flex justify-between mb-3">
+                        <span class="text-lg font-medium text-surface-900 dark:text-surface-100"
                           >Machine Learning</span
                         >
-                        <span class="text-sm text-surface-600 dark:text-surface-400">45%</span>
+                        <span class="text-lg font-semibold text-surface-600 dark:text-surface-400">45%</span>
                       </div>
-                      <div class="bg-surface-200 dark:bg-surface-700 rounded-full h-2">
+                      <div class="bg-surface-200 dark:bg-surface-700 rounded-full h-3">
                         <div
-                          class="bg-gradient-to-r from-purple-500 to-purple-600 h-2 rounded-full"
+                          class="bg-gradient-to-r from-purple-500 to-purple-600 h-3 rounded-full transition-all duration-1000"
                           style="width: 45%"
                         ></div>
                       </div>
@@ -367,7 +375,6 @@
         <!-- Quick Actions Section -->
         <section
           class="py-16 bg-gradient-to-br from-surface-50 to-primary-50 dark:from-surface-900 dark:to-surface-800 relative overflow-hidden"
-          :style="{ transform: `translateY(${scrollY * 0.06}px)` }"
         >
           <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-10 animate-fade-in-up">
@@ -396,7 +403,7 @@
                 <h3 class="font-semibold text-surface-900 dark:text-surface-100 mb-2">
                   {{ action.title }}
                 </h3>
-                <p class="text-sm text-surface-600 dark:text-surface-400">
+                <p class="text-xs sm:text-sm text-surface-600 dark:text-surface-400">
                   {{ action.description }}
                 </p>
               </div>
@@ -407,7 +414,6 @@
         <!-- Study Streak Section -->
         <section
           class="py-12 bg-gradient-to-r from-warn-50 to-success-50 dark:from-warn-900 dark:to-success-900 relative overflow-hidden"
-          :style="{ transform: `translateY(${scrollY * 0.04}px)` }"
         >
           <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <div class="card p-8 animate-fade-in-up">
@@ -429,19 +435,19 @@
                   <div class="text-3xl font-bold text-surface-900 dark:text-surface-100">
                     {{ analyticsStore.globalMetrics.totalStudyMin }}
                   </div>
-                  <div class="text-sm text-surface-600 dark:text-surface-400">Minutes Studied</div>
+                  <div class="text-xs sm:text-sm text-surface-600 dark:text-surface-400">Minutes Studied</div>
                 </div>
                 <div class="text-center">
                   <div class="text-3xl font-bold text-surface-900 dark:text-surface-100">
                     {{ analyticsStore.globalMetrics.avgScore }}%
                   </div>
-                  <div class="text-sm text-surface-600 dark:text-surface-400">Average Score</div>
+                  <div class="text-xs sm:text-sm text-surface-600 dark:text-surface-400">Average Score</div>
                 </div>
                 <div class="text-center">
                   <div class="text-3xl font-bold text-surface-900 dark:text-surface-100">
                     {{ libraryStore.items.length }}
                   </div>
-                  <div class="text-sm text-surface-600 dark:text-surface-400">Documents</div>
+                  <div class="text-xs sm:text-sm text-surface-600 dark:text-surface-400">Documents</div>
                 </div>
               </div>
             </div>
@@ -451,7 +457,6 @@
         <!-- Recommended Content Section -->
         <section
           class="py-12 bg-white dark:bg-surface-800 relative overflow-hidden"
-          :style="{ transform: `translateY(${scrollY * 0.04}px)` }"
         >
           <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-10 animate-fade-in-up">
@@ -532,42 +537,53 @@
 
         <!-- Achievement Badges Section -->
         <section
-          class="py-12 bg-gradient-to-br from-surface-50 to-primary-50 dark:from-surface-900 dark:to-surface-800 relative overflow-hidden"
-          :style="{ transform: `translateY(${scrollY * 0.04}px)` }"
+          class="py-20 bg-gradient-to-br from-surface-50 to-primary-50 dark:from-surface-900 dark:to-surface-800 relative overflow-hidden"
         >
-          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-10 animate-fade-in-up">
-              <h2 class="text-4xl font-bold text-surface-900 dark:text-surface-100 mb-3">
+          <!-- Background decoration -->
+          <div class="absolute inset-0">
+            <div
+              class="absolute top-20 left-20 w-32 h-32 bg-primary-200 dark:bg-primary-800 rounded-full opacity-20 animate-float"
+            ></div>
+            <div
+              class="absolute bottom-20 right-20 w-28 h-28 bg-success-200 dark:bg-success-800 rounded-full opacity-25 animate-float-delayed"
+            ></div>
+            <div
+              class="absolute top-1/2 right-1/4 w-24 h-24 bg-warn-200 dark:bg-warn-800 rounded-full opacity-30 animate-pulse"
+            ></div>
+          </div>
+
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16 animate-fade-in-up">
+              <h2 class="text-5xl font-bold text-surface-900 dark:text-surface-100 mb-4">
                 Your Achievements
               </h2>
-              <p class="text-xl text-surface-600 dark:text-surface-400">
-                Celebrate your milestones and progress
+              <p class="text-xl text-surface-600 dark:text-surface-400 max-w-2xl mx-auto">
+                Celebrate your milestones and track your learning progress
               </p>
             </div>
 
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 mb-12">
               <div
                 v-for="(badge, index) in achievementBadges"
                 :key="index"
-                class="group card p-6 text-center hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2"
-                :class="`animate-scale-in animation-delay-${(index + 1) * 100}`"
+                class="group card p-8 text-center hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2"
               >
                 <div
-                  class="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform"
+                  class="w-20 h-20 mx-auto mb-6 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg"
                   :class="badge.bgClass"
                 >
-                  <component :is="badge.icon" class="h-8 w-8 text-white" />
+                  <component :is="badge.icon" class="h-10 w-10 text-white" />
                 </div>
-                <h3 class="font-semibold text-surface-900 dark:text-surface-100 mb-2 text-sm">
+                <h3 class="font-semibold text-surface-900 dark:text-surface-100 mb-3 text-base">
                   {{ badge.title }}
                 </h3>
-                <p class="text-xs text-surface-600 dark:text-surface-400">
+                <p class="text-sm text-surface-600 dark:text-surface-400 leading-relaxed">
                   {{ badge.description }}
                 </p>
               </div>
             </div>
 
-            <div class="text-center mt-8 animate-fade-in-up animation-delay-800">
+            <div class="text-center animate-fade-in-up animation-delay-800">
               <router-link to="/analytics" class="btn-primary btn-lg group">
                 View All Achievements
                 <TrophyIcon class="h-5 w-5 ml-2 group-hover:scale-110 transition-transform" />
@@ -579,7 +595,6 @@
         <!-- Feature Showcase -->
         <section
           class="py-12 bg-white dark:bg-surface-800 relative overflow-hidden"
-          :style="{ transform: `translateY(${scrollY * 0.04}px)` }"
         >
           <!-- Background decoration -->
           <div class="absolute top-0 right-0 -translate-y-12 translate-x-12">
@@ -660,39 +675,40 @@
 
         <!-- Testimonials Section -->
         <section
-          class="py-20 pb-60 bg-gradient-to-br from-primary-50 to-success-50 dark:from-surface-800 dark:to-surface-900 relative overflow-hidden"
-          :style="{ transform: `translateY(${scrollY * 0.04}px)` }"
+          class="py-20 bg-gradient-to-br from-primary-50 to-success-50 dark:from-surface-800 dark:to-surface-900 relative overflow-hidden"
         >
           <!-- Background decoration -->
           <div class="absolute inset-0">
             <div
-              class="absolute top-10 left-10 w-32 h-32 bg-primary-200 dark:bg-primary-800 rounded-full opacity-20 animate-float"
+              class="absolute top-20 left-20 w-40 h-40 bg-primary-200 dark:bg-primary-800 rounded-full opacity-20 animate-float"
             ></div>
             <div
-              class="absolute bottom-10 right-10 w-24 h-24 bg-success-200 dark:bg-success-800 rounded-full opacity-30 animate-float-delayed"
+              class="absolute bottom-20 right-20 w-32 h-32 bg-success-200 dark:bg-success-800 rounded-full opacity-30 animate-float-delayed"
+            ></div>
+            <div
+              class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-24 h-24 bg-warn-200 dark:bg-warn-800 rounded-full opacity-25 animate-pulse"
             ></div>
           </div>
 
           <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="text-center mb-8 animate-fade-in-up">
-              <h2 class="text-4xl font-bold text-surface-900 dark:text-surface-100 mb-3">
+            <div class="text-center mb-12 animate-fade-in-up">
+              <h2 class="text-5xl font-bold text-surface-900 dark:text-surface-100 mb-4">
                 What Our Users Say
               </h2>
-              <p class="text-xl text-surface-600 dark:text-surface-400">
-                Join thousands of learners who are accelerating their education
+              <p class="text-xl text-surface-600 dark:text-surface-400 max-w-3xl mx-auto">
+                Join thousands of learners who are accelerating their education with AI-powered tools
               </p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
               <div
                 v-for="(testimonial, index) in testimonials"
                 :key="index"
                 class="card p-8 hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2"
-                :class="`animate-scale-in animation-delay-${(index + 1) * 200}`"
               >
                 <div class="flex items-center mb-6">
                   <div
-                    class="w-12 h-12 bg-gradient-to-br from-primary-500 to-primary-600 rounded-full flex items-center justify-center text-white font-bold text-lg"
+                    class="w-14 h-14 bg-gradient-to-br from-primary-500 to-primary-600 rounded-full flex items-center justify-center text-white font-bold text-lg"
                   >
                     {{ testimonial.name.charAt(0) }}
                   </div>
@@ -705,7 +721,7 @@
                     </p>
                   </div>
                 </div>
-                <blockquote class="text-surface-700 dark:text-surface-300 italic mb-4">
+                <blockquote class="text-surface-700 dark:text-surface-300 italic mb-4 text-base leading-relaxed">
                   "{{ testimonial.quote }}"
                 </blockquote>
                 <div class="flex text-warn-400">
@@ -714,7 +730,7 @@
               </div>
             </div>
 
-            <div class="text-center mt-12 animate-fade-in-up animation-delay-800">
+            <div class="text-center animate-fade-in-up animation-delay-600">
               <router-link to="/pricing" class="btn-primary btn-lg group">
                 Start Your Learning Journey
                 <ArrowRightIcon
@@ -728,8 +744,7 @@
         <!-- Plan Usage Banner -->
         <section
           v-if="authStore.user?.planId === 'free'"
-          class="py-16 bg-gradient-to-r from-warn-50 to-warn-100 dark:from-warn-900 dark:to-warn-800"
-          :style="{ transform: `translateY(${scrollY * 0.02}px)` }"
+          class="py-16 pb-8 bg-gradient-to-r from-warn-50 to-warn-100 dark:from-warn-900 dark:to-warn-800"
         >
           <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <div class="bg-white dark:bg-surface-800 rounded-2xl p-8 shadow-xl">
@@ -763,6 +778,138 @@
             </div>
           </div>
         </section>
+
+        <!-- Footer Section -->
+        <footer class="bg-surface-900 dark:bg-surface-950 text-white">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+              <!-- Brand Section -->
+              <div class="lg:col-span-2">
+                <div class="flex items-center space-x-2 mb-6">
+                  <div class="h-8 w-8 bg-primary-600 rounded-lg flex items-center justify-center">
+                    <span class="text-white font-bold text-sm">E</span>
+                  </div>
+                  <span class="text-2xl font-bold text-white">EduNow.AI</span>
+                </div>
+                <p class="text-surface-300 mb-6 max-w-md">
+                  Transform your learning experience with AI-powered study tools. Upload documents, 
+                  chat with an AI tutor, and track your progress with intelligent analytics.
+                </p>
+                <div class="flex space-x-4">
+                  <a href="#" class="text-surface-400 hover:text-white transition-colors">
+                    <span class="sr-only">Twitter</span>
+                    <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
+                    </svg>
+                  </a>
+                  <a href="#" class="text-surface-400 hover:text-white transition-colors">
+                    <span class="sr-only">GitHub</span>
+                    <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                      <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" />
+                    </svg>
+                  </a>
+                  <a href="#" class="text-surface-400 hover:text-white transition-colors">
+                    <span class="sr-only">LinkedIn</span>
+                    <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                      <path fill-rule="evenodd" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" clip-rule="evenodd" />
+                    </svg>
+                  </a>
+                </div>
+              </div>
+
+              <!-- Product Links -->
+              <div>
+                <h3 class="text-lg font-semibold text-white mb-6">Product</h3>
+                <ul class="space-y-4">
+                  <li>
+                    <router-link to="/library" class="text-surface-300 hover:text-white transition-colors">
+                      Library
+                    </router-link>
+                  </li>
+                  <li>
+                    <router-link to="/tutor" class="text-surface-300 hover:text-white transition-colors">
+                      AI Tutor
+                    </router-link>
+                  </li>
+                  <li>
+                    <router-link to="/study" class="text-surface-300 hover:text-white transition-colors">
+                      Study Mode
+                    </router-link>
+                  </li>
+                  <li>
+                    <router-link to="/analytics" class="text-surface-300 hover:text-white transition-colors">
+                      Analytics
+                    </router-link>
+                  </li>
+                  <li>
+                    <router-link to="/pricing" class="text-surface-300 hover:text-white transition-colors">
+                      Pricing
+                    </router-link>
+                  </li>
+                </ul>
+              </div>
+
+              <!-- Support Links -->
+              <div>
+                <h3 class="text-lg font-semibold text-white mb-6">Support</h3>
+                <ul class="space-y-4">
+                  <li>
+                    <a href="#" class="text-surface-300 hover:text-white transition-colors">
+                      Help Center
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" class="text-surface-300 hover:text-white transition-colors">
+                      Documentation
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" class="text-surface-300 hover:text-white transition-colors">
+                      Contact Us
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" class="text-surface-300 hover:text-white transition-colors">
+                      Status
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" class="text-surface-300 hover:text-white transition-colors">
+                      Community
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Bottom Section -->
+            <div class="mt-12 sm:mt-16 pt-6 sm:pt-8 border-t border-surface-800">
+              <div class="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
+                <div class="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-6">
+                  <p class="text-surface-400 text-sm text-center sm:text-left">
+                    © 2024 EduNow.AI. All rights reserved.
+                  </p>
+                  <div class="flex flex-wrap justify-center sm:justify-start space-x-4 sm:space-x-6">
+                    <a href="#" class="text-surface-400 hover:text-white text-sm transition-colors">
+                      Privacy Policy
+                    </a>
+                    <a href="#" class="text-surface-400 hover:text-white text-sm transition-colors">
+                      Terms of Service
+                    </a>
+                    <a href="#" class="text-surface-400 hover:text-white text-sm transition-colors">
+                      Cookie Policy
+                    </a>
+                  </div>
+                </div>
+                <div class="text-center sm:text-right">
+                  <p class="text-surface-400 text-sm">
+                    Made with ❤️ for learners worldwide
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </footer>
       </div>
     </div>
   </AppLayout>
