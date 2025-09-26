@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import type { Summary, MCQ, Flashcard, QuizSession, QuizSubmission } from '@/app/types'
+import { aiContentService } from '@/app/services/aiContentService'
 
 export const useStudyStore = defineStore('study', () => {
   const summaries = ref<Summary[]>([])
@@ -204,8 +205,32 @@ export const useStudyStore = defineStore('study', () => {
   const generateSummary = async (itemId: string): Promise<Summary> => {
     isLoading.value = true
     try {
-      await new Promise(resolve => setTimeout(resolve, 2000))
+      // Get document from library store
+      const { useLibraryStore } = await import('@/app/store/library')
+      const libraryStore = useLibraryStore()
+      const document = libraryStore.getItemById(itemId)
       
+      if (!document) {
+        throw new Error('Document not found')
+      }
+
+      // Use AI service to generate summary
+      const aiSummary = await aiContentService.generateDocumentSummary(document)
+      
+      const summary: Summary = {
+        id: Date.now().toString(),
+        itemId,
+        bullets: aiSummary.bullets,
+        tldr: aiSummary.tldr,
+        syllabusOutline: aiSummary.syllabusOutline,
+        sources: [{ type: document.type, refId: itemId, page: 1 }]
+      }
+
+      summaries.value.push(summary)
+      return summary
+    } catch (error) {
+      console.error('Error generating summary:', error)
+      // Fallback to mock summary
       const summary: Summary = {
         id: Date.now().toString(),
         itemId,
@@ -221,9 +246,8 @@ export const useStudyStore = defineStore('study', () => {
           'Chapter 3: Advanced Topics',
           'Chapter 4: Practical Applications'
         ],
-        sources: [{ type: 'pdf', refId: itemId, page: 1 }]
+        sources: [{ type: 'text', refId: itemId, page: 1 }]
       }
-
       summaries.value.push(summary)
       return summary
     } finally {
@@ -234,8 +258,35 @@ export const useStudyStore = defineStore('study', () => {
   const generateQuiz = async (itemId: string, questionCount: number): Promise<MCQ[]> => {
     isLoading.value = true
     try {
-      await new Promise(resolve => setTimeout(resolve, 1500))
+      // Get document from library store
+      const { useLibraryStore } = await import('@/app/store/library')
+      const libraryStore = useLibraryStore()
+      const document = libraryStore.getItemById(itemId)
       
+      if (!document) {
+        throw new Error('Document not found')
+      }
+
+      // Use AI service to generate quiz questions
+      const aiQuestions = await aiContentService.generateQuizQuestions(document, questionCount)
+      
+      const newMCQs: MCQ[] = aiQuestions.map((question: any, index: number) => ({
+        id: `mcq-${Date.now()}-${index}`,
+        itemId,
+        question: question.question,
+        options: question.options,
+        correctIndex: question.correctIndex,
+        explanation: question.explanation,
+        source: { type: document.type, refId: itemId, page: Math.floor(Math.random() * 10) + 1 },
+        difficulty: question.difficulty,
+        tags: question.tags
+      }))
+
+      mcqs.value.push(...newMCQs)
+      return newMCQs
+    } catch (error) {
+      console.error('Error generating quiz:', error)
+      // Fallback to mock questions
       const newMCQs: MCQ[] = []
       for (let i = 0; i < questionCount; i++) {
         const mcq: MCQ = {
@@ -250,13 +301,12 @@ export const useStudyStore = defineStore('study', () => {
           ],
           correctIndex: i % 4,
           explanation: `This is the correct answer because...`,
-          source: { type: 'pdf', refId: itemId, page: Math.floor(Math.random() * 10) + 1 },
+          source: { type: 'text', refId: itemId, page: Math.floor(Math.random() * 10) + 1 },
           difficulty: ['easy', 'medium', 'hard'][i % 3] as 'easy' | 'medium' | 'hard',
           tags: (['concept', 'application', 'theory'][i % 3] ? [['concept', 'application', 'theory'][i % 3]] : ['general']) as string[]
         }
         newMCQs.push(mcq)
       }
-
       mcqs.value.push(...newMCQs)
       return newMCQs
     } finally {
@@ -267,8 +317,33 @@ export const useStudyStore = defineStore('study', () => {
   const generateFlashcards = async (itemId: string, cardCount: number): Promise<Flashcard[]> => {
     isLoading.value = true
     try {
-      await new Promise(resolve => setTimeout(resolve, 1200))
+      // Get document from library store
+      const { useLibraryStore } = await import('@/app/store/library')
+      const libraryStore = useLibraryStore()
+      const document = libraryStore.getItemById(itemId)
       
+      if (!document) {
+        throw new Error('Document not found')
+      }
+
+      // Use AI service to generate flashcards
+      const aiCards = await aiContentService.generateFlashcards(document, cardCount)
+      
+      const newCards: Flashcard[] = aiCards.map((card: any, index: number) => ({
+        id: `card-${Date.now()}-${index}`,
+        itemId,
+        front: card.front,
+        back: card.back,
+        source: { type: document.type, refId: itemId, page: Math.floor(Math.random() * 10) + 1 },
+        ease: 2.5,
+        nextReviewAt: new Date().toISOString()
+      }))
+
+      flashcards.value.push(...newCards)
+      return newCards
+    } catch (error) {
+      console.error('Error generating flashcards:', error)
+      // Fallback to mock cards
       const newCards: Flashcard[] = []
       for (let i = 0; i < cardCount; i++) {
         const card: Flashcard = {
@@ -276,13 +351,12 @@ export const useStudyStore = defineStore('study', () => {
           itemId,
           front: `What is the definition of concept ${i + 1}?`,
           back: `Concept ${i + 1} is defined as...`,
-          source: { type: 'pdf', refId: itemId, page: Math.floor(Math.random() * 10) + 1 },
+          source: { type: 'text', refId: itemId, page: Math.floor(Math.random() * 10) + 1 },
           ease: 2.5,
           nextReviewAt: new Date().toISOString()
         }
         newCards.push(card)
       }
-
       flashcards.value.push(...newCards)
       return newCards
     } finally {

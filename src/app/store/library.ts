@@ -107,6 +107,64 @@ export const useLibraryStore = defineStore('library', () => {
     selectedTags.value = []
   }
 
+  const addTrialCourse = (courseData: any, courseOutline: any) => {
+    // Generate a unique ID for the course
+    const courseId = `trial-course-${Date.now()}`
+    
+    // Extract topic from course outline title
+    const topic = courseOutline.title.replace('Introduction to ', '').toLowerCase()
+    
+    // Generate tags based on the topic
+    const tags = [topic.replace(/\s+/g, '-'), 'trial-course', 'ai-generated']
+    
+    // Add more specific tags based on topic
+    if (topic.includes('solar system') || topic.includes('astronomy')) {
+      tags.push('science', 'space', 'astronomy')
+    } else if (topic.includes('python')) {
+      tags.push('programming', 'python', 'coding')
+    } else if (topic.includes('javascript')) {
+      tags.push('programming', 'javascript', 'web-development')
+    } else if (topic.includes('react')) {
+      tags.push('programming', 'react', 'frontend')
+    } else if (topic.includes('biology')) {
+      tags.push('science', 'biology', 'life-sciences')
+    } else if (topic.includes('chemistry')) {
+      tags.push('science', 'chemistry', 'physical-sciences')
+    } else if (topic.includes('physics')) {
+      tags.push('science', 'physics', 'physical-sciences')
+    } else if (topic.includes('math')) {
+      tags.push('mathematics', 'math', 'quantitative')
+    } else if (topic.includes('history')) {
+      tags.push('history', 'social-sciences', 'humanities')
+    } else if (topic.includes('geography')) {
+      tags.push('geography', 'earth-sciences', 'social-sciences')
+    } else if (topic.includes('literature')) {
+      tags.push('literature', 'english', 'humanities')
+    } else if (topic.includes('art')) {
+      tags.push('art', 'design', 'creative')
+    } else if (topic.includes('music')) {
+      tags.push('music', 'arts', 'creative')
+    }
+    
+    // Create the library item
+    const libraryItem: IngestedItem = {
+      id: courseId,
+      title: courseOutline.title,
+      type: 'text', // Treat trial courses as text content
+      createdAt: new Date().toISOString(),
+      sizeKB: Math.floor(Math.random() * 500) + 100, // Mock size
+      tags: tags,
+      previewText: courseOutline.description || `A comprehensive course on ${topic} covering key concepts and practical applications.`,
+      status: 'ready'
+    }
+    
+    // Add to library
+    addItem(libraryItem)
+    
+    console.log('Added trial course to library:', libraryItem)
+    return libraryItem
+  }
+
   return {
     items,
     isLoading,
@@ -124,6 +182,7 @@ export const useLibraryStore = defineStore('library', () => {
     setSearchQuery,
     setSelectedType,
     setSelectedTags,
-    clearFilters
+    clearFilters,
+    addTrialCourse
   }
 })

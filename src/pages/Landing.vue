@@ -36,27 +36,140 @@
       </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="relative overflow-hidden">
+    <!-- Trial Feature Hero Section -->
+    <section class="relative overflow-hidden bg-gradient-to-br from-primary-50 to-success-50 dark:from-surface-900 dark:to-surface-800">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
         <div class="text-center">
           <h1 class="text-4xl sm:text-6xl font-bold tracking-tight text-surface-900 dark:text-surface-100">
-            Learn Anything with
-            <span class="text-primary-600">AI-Powered</span>
-            <br />
-            Study Tools
+            Start Creating Your Courses,
+            <span class="text-primary-600">Now!</span>
           </h1>
-          <p class="mt-6 text-lg leading-8 text-surface-600 dark:text-surface-400 max-w-2xl mx-auto">
-            Upload your documents, videos, and audio files. Get instant summaries, practice with AI-generated quizzes, 
-            and chat with an AI tutor that knows your content inside out.
+          <p class="mt-6 text-lg leading-8 text-surface-600 dark:text-surface-400 max-w-3xl mx-auto">
+            Convert any study material into a personalized learning experience with adaptive lessons, 
+            intelligent practice, and real-time feedback.
           </p>
-          <div class="mt-10 flex items-center justify-center gap-x-6">
-            <router-link to="/sign-up" class="btn-primary btn-lg">
-              Try for Free
-            </router-link>
-            <router-link to="/pricing" class="btn-outline btn-lg">
-              View Pricing
-            </router-link>
+          
+          <!-- Course Creation Inputs -->
+          <div class="mt-12 max-w-4xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <!-- Upload File Input -->
+              <div 
+                class="card p-6 hover:shadow-lg transition-shadow cursor-pointer border-2 border-dashed border-surface-300 hover:border-primary-400 dark:border-surface-600 dark:hover:border-primary-500"
+                :class="{ 'border-primary-500 bg-primary-50 dark:bg-primary-900': isDragOver }"
+                @click="triggerFileUpload"
+                @dragover.prevent="isDragOver = true"
+                @dragleave.prevent="isDragOver = false"
+                @drop.prevent="handleFileDrop"
+              >
+                <input
+                  ref="fileInput"
+                  type="file"
+                  class="hidden"
+                  accept=".pdf,.doc,.docx,.ppt,.pptx,.txt,.mp4,.mp3,.wav,.m4a"
+                  multiple
+                  @change="handleFileSelect"
+                />
+                <div class="text-center">
+                  <CloudArrowUpIcon class="h-12 w-12 text-primary-500 mx-auto mb-4" />
+                  <h3 class="text-lg font-semibold text-surface-900 dark:text-surface-100 mb-2">
+                    Upload a file here...
+                  </h3>
+                  <p class="text-sm text-surface-600 dark:text-surface-400 mb-4">
+                    PDF, DOC, PPT, MP4, MP3 supported
+                  </p>
+                  
+                  <!-- File Preview -->
+                  <div v-if="uploadedFiles.length > 0" class="mt-4 space-y-2">
+                    <div 
+                      v-for="(file, index) in uploadedFiles" 
+                      :key="index"
+                      class="flex items-center justify-between p-2 bg-surface-100 dark:bg-surface-700 rounded-lg"
+                    >
+                      <div class="flex items-center space-x-2">
+                        <DocumentIcon class="h-4 w-4 text-primary-500" />
+                        <span class="text-sm text-surface-900 dark:text-surface-100 truncate">
+                          {{ file.name }}
+                        </span>
+                        <span class="text-xs text-surface-500 dark:text-surface-400">
+                          ({{ formatFileSize(file.size) }})
+                        </span>
+                      </div>
+                      <button
+                        @click.stop="removeFile(index)"
+                        class="text-error-500 hover:text-error-700 p-1"
+                      >
+                        <XMarkIcon class="h-4 w-4" />
+                      </button>
+                    </div>
+                  </div>
+                  
+                  <p v-if="uploadedFiles.length === 0" class="text-xs text-surface-500 dark:text-surface-400">
+                    Click to browse or drag & drop files
+                  </p>
+                </div>
+              </div>
+              
+              <!-- Add Link Input -->
+              <div class="card p-6 hover:shadow-lg transition-shadow cursor-pointer border-2 border-dashed border-surface-300 hover:border-primary-400 dark:border-surface-600 dark:hover:border-primary-500">
+                <div class="text-center">
+                  <LinkIcon class="h-12 w-12 text-primary-500 mx-auto mb-4" />
+                  <h3 class="text-lg font-semibold text-surface-900 dark:text-surface-100 mb-2">
+                    Add a link...
+                  </h3>
+                  <p class="text-sm text-surface-600 dark:text-surface-400 mb-4">
+                    YouTube, articles, websites
+                  </p>
+                  
+                  <!-- Link Input -->
+                  <div class="space-y-3">
+                    <input
+                      v-model="courseLinks"
+                      type="url"
+                      placeholder="https://example.com"
+                      class="w-full px-3 py-2 border border-surface-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-surface-800 dark:border-surface-600 dark:text-surface-100 text-sm"
+                    />
+                    
+                    <!-- Link Preview -->
+                    <div v-if="courseLinks.length > 0" class="mt-2">
+                      <div class="flex items-center justify-between p-2 bg-surface-100 dark:bg-surface-700 rounded-lg">
+                        <div class="flex items-center space-x-2">
+                          <LinkIcon class="h-4 w-4 text-primary-500" />
+                          <span class="text-sm text-surface-900 dark:text-surface-100 truncate">
+                            {{ courseLinks }}
+                          </span>
+                        </div>
+                        <button
+                          @click="courseLinks = ''"
+                          class="text-error-500 hover:text-error-700 p-1"
+                        >
+                          <XMarkIcon class="h-4 w-4" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Description Input -->
+            <div class="card p-6 mb-6">
+              <label class="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-3">
+                Describe what you would like to learn
+              </label>
+              <textarea
+                v-model="courseDescription"
+                class="w-full h-32 px-4 py-3 border border-surface-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-surface-800 dark:border-surface-600 dark:text-surface-100"
+                placeholder="You can tell me what course you want to generate..."
+              ></textarea>
+            </div>
+            
+            <!-- Start Trial Button -->
+            <button 
+              class="btn-primary btn-lg w-full md:w-auto"
+              @click="startTrial"
+            >
+              Start Creating Course
+            </button>
           </div>
           
           <!-- Trust indicators -->
@@ -67,7 +180,7 @@
             </div>
             <div class="flex items-center space-x-2">
               <CheckIcon class="h-5 w-5 text-success-500" />
-              <span class="text-sm">Free for 3 documents</span>
+              <span class="text-sm">Free trial available</span>
             </div>
             <div class="flex items-center space-x-2">
               <CheckIcon class="h-5 w-5 text-success-500" />
@@ -86,7 +199,7 @@
             How It Works
           </h2>
           <p class="mt-4 text-lg text-surface-600 dark:text-surface-400">
-            Four simple steps to supercharge your learning
+            Advanced AI transforms your materials into personalized courses!
           </p>
         </div>
 
@@ -96,46 +209,46 @@
               <CloudArrowUpIcon class="w-8 h-8 text-primary-600 dark:text-primary-400" />
             </div>
             <h3 class="mt-6 text-lg font-semibold text-surface-900 dark:text-surface-100">
-              1. Upload
+              1. Upload Content
             </h3>
             <p class="mt-2 text-surface-600 dark:text-surface-400">
-              Upload PDFs, videos, audio files, or paste text. We support all major formats.
+              Upload files, add links, or describe what you want to learn. Our AI processes everything.
             </p>
           </div>
 
           <div class="text-center">
-            <div class="flex items-center justify-center w-16 h-16 mx-auto bg-primary-100 dark:bg-primary-900 rounded-xl">
-              <SparklesIcon class="w-8 h-8 text-primary-600 dark:text-primary-400" />
+            <div class="flex items-center justify-center w-16 h-16 mx-auto bg-success-100 dark:bg-success-900 rounded-xl">
+              <AcademicCapIcon class="w-8 h-8 text-success-600 dark:text-success-400" />
             </div>
             <h3 class="mt-6 text-lg font-semibold text-surface-900 dark:text-surface-100">
-              2. Understand
+              2. Learning Assessment
             </h3>
             <p class="mt-2 text-surface-600 dark:text-surface-400">
-              Get instant AI-generated summaries and key insights from your content.
+              Answer a few questions to gauge your understanding and learning preferences.
             </p>
           </div>
 
           <div class="text-center">
-            <div class="flex items-center justify-center w-16 h-16 mx-auto bg-primary-100 dark:bg-primary-900 rounded-xl">
-              <AcademicCapIcon class="w-8 h-8 text-primary-600 dark:text-primary-400" />
+            <div class="flex items-center justify-center w-16 h-16 mx-auto bg-warn-100 dark:bg-warn-900 rounded-xl">
+              <SparklesIcon class="w-8 h-8 text-warn-600 dark:text-warn-400" />
             </div>
             <h3 class="mt-6 text-lg font-semibold text-surface-900 dark:text-surface-100">
-              3. Practice
+              3. Course Generation
             </h3>
             <p class="mt-2 text-surface-600 dark:text-surface-400">
-              Test your knowledge with AI-generated quizzes and spaced-repetition flashcards.
+              AI creates a personalized course outline with lessons, practice, and assessments.
             </p>
           </div>
 
           <div class="text-center">
-            <div class="flex items-center justify-center w-16 h-16 mx-auto bg-primary-100 dark:bg-primary-900 rounded-xl">
-              <TrophyIcon class="w-8 h-8 text-primary-600 dark:text-primary-400" />
+            <div class="flex items-center justify-center w-16 h-16 mx-auto bg-purple-100 dark:bg-purple-900 rounded-xl">
+              <TrophyIcon class="w-8 h-8 text-purple-600 dark:text-purple-400" />
             </div>
             <h3 class="mt-6 text-lg font-semibold text-surface-900 dark:text-surface-100">
-              4. Master
+              4. Start Learning
             </h3>
             <p class="mt-2 text-surface-600 dark:text-surface-400">
-              Track your progress and get personalized recommendations to improve.
+              Begin your personalized learning journey with adaptive lessons and real-time feedback.
             </p>
           </div>
         </div>
@@ -304,6 +417,8 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import {
   CheckIcon,
   CloudArrowUpIcon,
@@ -318,8 +433,108 @@ import {
   BoltIcon,
   SunIcon,
   MoonIcon,
+  LinkIcon,
+  DocumentIcon,
+  XMarkIcon,
 } from '@heroicons/vue/24/outline'
 import { useUiStore } from '@/app/store/ui'
 
 const uiStore = useUiStore()
+const router = useRouter()
+
+// File upload state
+const fileInput = ref<HTMLInputElement>()
+const uploadedFiles = ref<File[]>([])
+const isDragOver = ref(false)
+const courseLinks = ref('')
+
+// Trial workflow state
+const courseDescription = ref('')
+
+// File upload methods
+const triggerFileUpload = () => {
+  fileInput.value?.click()
+}
+
+const handleFileSelect = (event: Event) => {
+  const target = event.target as HTMLInputElement
+  if (target.files) {
+    const files = Array.from(target.files)
+    validateAndAddFiles(files)
+  }
+}
+
+const handleFileDrop = (event: DragEvent) => {
+  isDragOver.value = false
+  if (event.dataTransfer?.files) {
+    const files = Array.from(event.dataTransfer.files)
+    validateAndAddFiles(files)
+  }
+}
+
+const validateAndAddFiles = (files: File[]) => {
+  const allowedTypes = [
+    'application/pdf',
+    'application/msword',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'application/vnd.ms-powerpoint',
+    'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+    'text/plain',
+    'video/mp4',
+    'audio/mpeg',
+    'audio/wav',
+    'audio/mp4'
+  ]
+  
+  const maxSize = 50 * 1024 * 1024 // 50MB
+  
+  files.forEach(file => {
+    if (!allowedTypes.includes(file.type)) {
+      uiStore.showError(`File type not supported: ${file.name}`)
+      return
+    }
+    
+    if (file.size > maxSize) {
+      uiStore.showError(`File too large: ${file.name} (max 50MB)`)
+      return
+    }
+    
+    // Check if file already exists
+    if (!uploadedFiles.value.some(f => f.name === file.name && f.size === file.size)) {
+      uploadedFiles.value.push(file)
+    }
+  })
+}
+
+const removeFile = (index: number) => {
+  uploadedFiles.value.splice(index, 1)
+}
+
+const formatFileSize = (bytes: number) => {
+  if (bytes === 0) return '0 Bytes'
+  const k = 1024
+  const sizes = ['Bytes', 'KB', 'MB', 'GB']
+  const i = Math.floor(Math.log(bytes) / Math.log(k))
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
+}
+
+const startTrial = () => {
+  // Validate inputs
+  if (uploadedFiles.value.length === 0 && !courseLinks.value && !courseDescription.value.trim()) {
+    uiStore.showError('Please upload a file, add a link, or describe what you want to learn')
+    return
+  }
+  
+  // Store the course data in session storage for the trial flow
+  const courseData = {
+    files: uploadedFiles.value.map(f => ({ name: f.name, size: f.size, type: f.type })),
+    links: courseLinks.value,
+    description: courseDescription.value
+  }
+  
+  sessionStorage.setItem('trialCourseData', JSON.stringify(courseData))
+  
+  // Redirect to learning assessment
+  router.push('/trial/assessment')
+}
 </script>

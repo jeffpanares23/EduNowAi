@@ -131,77 +131,8 @@
           </div>
 
           <!-- Subscription Tab -->
-          <div v-if="activeTab === 'subscription'" class="space-y-6">
-            <div class="card p-6">
-              <h2 class="text-lg font-semibold text-surface-900 dark:text-surface-100 mb-6">
-                Current Subscription
-              </h2>
-
-              <div class="bg-surface-50 dark:bg-surface-800 rounded-lg p-6 mb-6">
-                <div class="flex items-center justify-between">
-                  <div>
-                    <h3 class="text-lg font-medium text-surface-900 dark:text-surface-100">
-                      {{ authStore.user?.planId?.toUpperCase() || 'FREE' }} Plan
-                    </h3>
-                    <p class="text-surface-600 dark:text-surface-400">
-                      {{ getPlanDescription(authStore.user?.planId) }}
-                    </p>
-                  </div>
-                  <div class="text-right">
-                    <div class="text-2xl font-bold text-surface-900 dark:text-surface-100">
-                      ${{ getPlanPrice(authStore.user?.planId) }}
-                    </div>
-                    <div class="text-sm text-surface-600 dark:text-surface-400">per month</div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                <div>
-                  <h4 class="font-medium text-surface-900 dark:text-surface-100 mb-2">
-                    Usage This Month
-                  </h4>
-                  <div class="space-y-2">
-                    <div class="flex justify-between text-sm">
-                      <span class="text-surface-600 dark:text-surface-400">Documents</span>
-                      <span class="text-surface-900 dark:text-surface-100">
-                        {{ usageStats.documentsUsed }}/{{ getDocumentLimit(authStore.user?.planId) }}
-                      </span>
-                    </div>
-                    <div class="w-full bg-surface-200 dark:bg-surface-700 rounded-full h-2">
-                      <div
-                        class="bg-primary-600 h-2 rounded-full transition-all duration-300"
-                        :style="{
-                          width: `${Math.min((usageStats.documentsUsed / getDocumentLimit(authStore.user?.planId)) * 100, 100)}%`,
-                        }"
-                      ></div>
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <h4 class="font-medium text-surface-900 dark:text-surface-100 mb-2">
-                    Next Billing Date
-                  </h4>
-                  <p class="text-surface-600 dark:text-surface-400">
-                    {{ authStore.user?.planId === 'free' ? 'No billing' : 'January 15, 2024' }}
-                  </p>
-                </div>
-              </div>
-
-              <div class="flex space-x-3">
-                <router-link to="/pricing" class="btn-primary">
-                  {{ authStore.user?.planId === 'free' ? 'Upgrade Plan' : 'Change Plan' }}
-                </router-link>
-                <button
-                  v-if="authStore.user?.planId !== 'free'"
-                  class="btn-outline"
-                  @click="cancelSubscription"
-                >
-                  Cancel Subscription
-                </button>
-              </div>
-            </div>
+          <div v-if="activeTab === 'subscription'">
+            <SubscriptionManager />
           </div>
 
           <!-- Preferences Tab -->
@@ -400,6 +331,7 @@ import {
   CameraIcon,
 } from '@heroicons/vue/24/outline'
 import AppLayout from '@/components/AppLayout.vue'
+import SubscriptionManager from '@/components/SubscriptionManager.vue'
 import { useAuthStore } from '@/app/store/auth'
 import { useUiStore } from '@/app/store/ui'
 

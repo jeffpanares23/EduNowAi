@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import type { ChatTurn, Chunk } from '@/app/types'
+import { aiContentService } from '@/app/services/aiContentService'
+import { useLibraryStore } from '@/app/store/library'
 
 export const useTutorStore = defineStore('tutor', () => {
   const chatHistory = ref<ChatTurn[]>([])
@@ -47,14 +49,23 @@ export const useTutorStore = defineStore('tutor', () => {
     isLoading.value = true
 
     try {
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 1500))
+      const libraryStore = useLibraryStore()
+      const currentItem = currentItemId.value ? libraryStore.getItemById(currentItemId.value) : null
       
-      // Mock response with citations
-      const mockResponse = generateMockResponse(message, concisionMode.value, levelMode.value)
-      const mockCitations = generateMockCitations()
+      if (!currentItem) {
+        addAssistantMessage('Please select a document first to ask questions about.')
+        return
+      }
+
+      // Use AI service to generate response
+      const response = await aiContentService.generateTutorResponse(
+        message,
+        currentItem,
+        concisionMode.value,
+        levelMode.value
+      )
       
-      addAssistantMessage(mockResponse, mockCitations)
+      addAssistantMessage(response.text, response.citations)
     } catch (error) {
       console.error('Failed to send message:', error)
       addAssistantMessage('Sorry, I encountered an error. Please try again.')

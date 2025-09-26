@@ -16,6 +16,12 @@ import Pricing from '@/pages/Pricing.vue'
 import Account from '@/pages/Account.vue'
 import NotFound from '@/pages/NotFound.vue'
 
+// Import trial pages
+import TrialAssessment from '@/pages/TrialAssessment.vue'
+import TrialPreferences from '@/pages/TrialPreferences.vue'
+import TrialOutline from '@/pages/TrialOutline.vue'
+import SubscriptionSelection from '@/pages/SubscriptionSelection.vue'
+
 const router = createRouter({
   history: createWebHistory(),
   routes: [
@@ -54,6 +60,44 @@ const router = createRouter({
       meta: { 
         requiresAuth: false,
         title: 'Pricing - EduNow.AI'
+      }
+    },
+
+    // Trial routes
+    {
+      path: '/trial/assessment',
+      name: 'TrialAssessment',
+      component: TrialAssessment,
+      meta: { 
+        requiresAuth: false,
+        title: 'Learning Assessment - EduNow.AI'
+      }
+    },
+    {
+      path: '/trial/preferences',
+      name: 'TrialPreferences',
+      component: TrialPreferences,
+      meta: { 
+        requiresAuth: false,
+        title: 'Learning Preferences - EduNow.AI'
+      }
+    },
+    {
+      path: '/trial/outline',
+      name: 'TrialOutline',
+      component: TrialOutline,
+      meta: { 
+        requiresAuth: false,
+        title: 'Course Outline - EduNow.AI'
+      }
+    },
+    {
+      path: '/subscription-selection',
+      name: 'SubscriptionSelection',
+      component: SubscriptionSelection,
+      meta: { 
+        requiresAuth: true,
+        title: 'Choose Your Plan - EduNow.AI'
       }
     },
 
@@ -156,14 +200,49 @@ router.beforeEach(async (to, from, next) => {
 
   // Redirect authenticated users away from auth pages
   if (authStore.isAuthenticated && ['SignIn', 'SignUp'].includes(to.name as string)) {
+    // Check if user came from trial workflow
+    const trialCompleted = sessionStorage.getItem('trialCompleted')
+    const selectedPlan = sessionStorage.getItem('selectedPlan')
+    
+    if (trialCompleted === 'true' && !selectedPlan) {
+      next({ name: 'SubscriptionSelection' })
+      return
+    }
+    
+    // For trial users who have completed the workflow, redirect to library
+    if (trialCompleted === 'true' && selectedPlan) {
+      next({ name: 'Library' })
+      return
+    }
+    
     next({ name: 'Dashboard' })
     return
   }
 
   // Redirect to dashboard if accessing root while authenticated
   if (to.name === 'Landing' && authStore.isAuthenticated) {
+    // Check if user came from trial workflow
+    const trialCompleted = sessionStorage.getItem('trialCompleted')
+    const selectedPlan = sessionStorage.getItem('selectedPlan')
+    
+    if (trialCompleted === 'true' && selectedPlan) {
+      next({ name: 'Library' })
+      return
+    }
+    
     next({ name: 'Dashboard' })
     return
+  }
+
+  // Check if user needs to select subscription plan
+  if (authStore.isAuthenticated && to.name === 'Dashboard') {
+    const trialCompleted = sessionStorage.getItem('trialCompleted')
+    const selectedPlan = sessionStorage.getItem('selectedPlan')
+    
+    if (trialCompleted === 'true' && !selectedPlan) {
+      next({ name: 'SubscriptionSelection' })
+      return
+    }
   }
 
   next()

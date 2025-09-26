@@ -15,7 +15,7 @@
         <div class="flex justify-between h-16">
           <!-- Left side -->
           <div class="flex items-center">
-            <router-link to="/" class="flex items-center space-x-2">
+            <router-link to="/dashboard" class="flex items-center space-x-2">
               <div class="h-8 w-8 bg-primary-600 rounded-lg flex items-center justify-center">
                 <span class="text-white font-bold text-sm">E</span>
               </div>
@@ -201,6 +201,7 @@ import {
   AcademicCapIcon,
   ChartBarIcon,
   CurrencyDollarIcon,
+  HomeIcon,
 } from '@heroicons/vue/24/outline'
 import LanguageSwitcher from '@/components/LanguageSwitcher.vue'
 import { useAuthStore } from '@/app/store/auth'
@@ -212,6 +213,7 @@ const authStore = useAuthStore()
 const uiStore = useUiStore()
 
 const navigationItems = computed(() => [
+  { name: 'Dashboard', to: '/dashboard', icon: HomeIcon },
   { name: 'Library', to: '/library', icon: BookOpenIcon },
   { name: 'Tutor', to: '/tutor', icon: ChatBubbleLeftRightIcon },
   { name: 'Study', to: '/study', icon: AcademicCapIcon },

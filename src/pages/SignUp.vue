@@ -11,14 +11,33 @@
           </span>
         </div>
         <h2 class="text-center text-3xl font-bold tracking-tight text-surface-900 dark:text-surface-100">
-          Create your account
+          {{ isTrialUser ? 'Complete Your Trial' : 'Create your account' }}
         </h2>
         <p class="mt-2 text-center text-sm text-surface-600 dark:text-surface-400">
-          Or
-          <router-link to="/sign-in" class="font-medium text-primary-600 hover:text-primary-500">
-            sign in to existing account
-          </router-link>
+          {{ isTrialUser ? 'You\'re almost ready to start learning!' : 'Or' }}
+          <span v-if="!isTrialUser">
+            <router-link to="/sign-in" class="font-medium text-primary-600 hover:text-primary-500">
+              sign in to existing account
+            </router-link>
+          </span>
         </p>
+        
+        <!-- Trial Progress Indicator -->
+        <div v-if="isTrialUser" class="mt-6 p-4 bg-primary-50 dark:bg-primary-900 rounded-lg border border-primary-200 dark:border-primary-700">
+          <div class="flex items-center">
+            <div class="flex-shrink-0">
+              <SparklesIcon class="h-5 w-5 text-primary-600 dark:text-primary-400" />
+            </div>
+            <div class="ml-3">
+              <p class="text-sm font-medium text-primary-800 dark:text-primary-200">
+                Trial Course Ready!
+              </p>
+              <p class="text-xs text-primary-700 dark:text-primary-300">
+                Your personalized course is waiting for you after signup.
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
       
       <form class="mt-8 space-y-6" @submit.prevent="handleSubmit">
@@ -130,14 +149,25 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { reactive, ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { SparklesIcon } from '@heroicons/vue/24/outline'
 import { useAuthStore } from '@/app/store/auth'
 import { useUiStore } from '@/app/store/ui'
+import { useLibraryStore } from '@/app/store/library'
 
 const router = useRouter()
 const authStore = useAuthStore()
 const uiStore = useUiStore()
+const libraryStore = useLibraryStore()
+
+const isTrialUser = ref(false)
+
+// Check if user is completing trial on mount
+onMounted(() => {
+  const trialCompleted = sessionStorage.getItem('trialCompleted')
+  isTrialUser.value = trialCompleted === 'true'
+})
 
 const form = reactive({
   name: '',
@@ -167,7 +197,36 @@ const handleSubmit = async () => {
   
   if (success) {
     uiStore.showSuccess('Account created successfully! Welcome to EduNow.AI!')
-    router.push('/dashboard')
+    
+    // Check if user came from trial workflow
+    const trialCompleted = sessionStorage.getItem('trialCompleted')
+    const selectedPlan = sessionStorage.getItem('selectedPlan')
+    
+    if (trialCompleted === 'true') {
+      // Add trial course to library
+      try {
+        const courseData = JSON.parse(sessionStorage.getItem('trialCourseData') || '{}')
+        const courseOutline = JSON.parse(sessionStorage.getItem('trialCourseOutline') || '{}')
+        
+        if (courseOutline.title) {
+          libraryStore.addTrialCourse(courseData, courseOutline)
+          uiStore.showSuccess('Your trial course has been added to your library!')
+        }
+      } catch (error) {
+        console.error('Error adding trial course to library:', error)
+      }
+      
+      if (!selectedPlan) {
+        // Redirect to subscription selection
+        router.push('/subscription-selection')
+      } else {
+        // Redirect to library to show the new course
+        router.push('/library')
+      }
+    } else {
+      // Normal flow to dashboard
+      router.push('/dashboard')
+    }
   } else {
     uiStore.showError('Account creation failed. Please try again.')
   }
